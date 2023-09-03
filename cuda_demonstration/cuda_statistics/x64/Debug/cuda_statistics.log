@@ -1,0 +1,14 @@
+﻿  Compiling CUDA source file kernel.cu...
+  Compiling CUDA source file statistical_functions.cu...
+  
+  D:\projects\CUDA-coding\cuda_demonstration\cuda_statistics>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2\bin\nvcc.exe" -gencode=arch=compute_52,code=\"sm_52,compute_52\" --use-local-env -ccbin "D:\VisualStudio\2022\Community\VC\Tools\MSVC\14.37.32822\bin\HostX64\x64" -x cu   -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2\include"  -G   --keep-dir x64\Debug  -maxrregcount=0   --machine 64 --compile -cudart static  -g  -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -Xcompiler "/Fdx64\Debug\vc143.pdb" -o D:\projects\CUDA-coding\cuda_demonstration\cuda_statistics\x64\Debug\kernel.cu.obj "D:\projects\CUDA-coding\cuda_demonstration\cuda_statistics\kernel.cu" 
+  
+  D:\projects\CUDA-coding\cuda_demonstration\cuda_statistics>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2\bin\nvcc.exe" -gencode=arch=compute_52,code=\"sm_52,compute_52\" --use-local-env -ccbin "D:\VisualStudio\2022\Community\VC\Tools\MSVC\14.37.32822\bin\HostX64\x64" -x cu   -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2\include"  -G   --keep-dir x64\Debug  -maxrregcount=0   --machine 64 --compile -cudart static  -g  -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -Xcompiler "/Fdx64\Debug\vc143.pdb" -o D:\projects\CUDA-coding\cuda_demonstration\cuda_statistics\x64\Debug\statistical_functions.cu.obj "D:\projects\CUDA-coding\cuda_demonstration\cuda_statistics\statistical_functions.cu" 
+  kernel.cu
+  statistical_functions.cu
+  tmpxft_00001d84_00000000-7_statistical_functions.cudafe1.cpp
+  tmpxft_00002eb8_00000000-7_kernel.cudafe1.cpp
+statistical_functions.cu.obj : error LNK2005: main уже определен в kernel.cu.obj
+     Создается библиотека D:\projects\CUDA-coding\cuda_demonstration\x64\Debug\cuda_statistics.lib и объект D:\projects\CUDA-coding\cuda_demonstration\x64\Debug\cuda_statistics.exp
+LINK : warning LNK4098: библиотека по умолчанию "LIBCMT" конфликтует с использованием других библиотек; используйте /NODEFAULTLIB:library
+D:\projects\CUDA-coding\cuda_demonstration\x64\Debug\cuda_statistics.exe : fatal error LNK1169: обнаружен многократно определенный символ - один или более
