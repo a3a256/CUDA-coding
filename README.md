@@ -1,2 +1,2 @@
 # CUDA-coding
-Various uses of parallel-programming using CUDA API
+Various examples of parallel-programming using CUDA API
