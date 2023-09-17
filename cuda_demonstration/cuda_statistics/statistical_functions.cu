@@ -9,7 +9,7 @@ __global__ void sum1dKernel(int *a, int *val, const int m, const int n) {
 	int row = blockDim.y * blockIdx.y + threadIdx.y;
 	int col = blockDim.x * blockIdx.x + threadIdx.x;
 	if (col < n && row < m) {
-		val[col] = a[n * row + col];
+		val[col] += a[n * row + col];
 	}
 }
 
@@ -29,7 +29,13 @@ int main() {
 		}
 	}
 
-	cudaError_t status = cudaMean1d(a, res, m, n);
+	int threads = 1;
+	int blocks = (m * n + threads - 1) / threads;
+
+	dim3 THREADS(threads);
+	dim3 BLOCKS(blocks);
+
+	cudaError_t status = cudaMean1d(a, res, m, n, THREADS, BLOCKS);
 	printf("\n");
 
 	if (status != cudaSuccess) {
@@ -37,7 +43,11 @@ int main() {
 		return 1;
 	}
 
-	printf("Mean value of a {1, 2, 3, 4, 5} array is %d\n", res);
+	
+	for (int i = 0; i < n; i++) {
+		printf("%d ", res[i]);
+	}
+	printf("\n");
 
 	status = cudaDeviceReset();
 	if (status != cudaSuccess) {
@@ -80,7 +90,7 @@ cudaError_t cudaMean1d(int* a, int* b, const int m, const int n, dim3 threads, d
 		goto Error;
 	}
 
-	sum1dKernel << <blocks, threads >> > (dev_a, dev_c);
+	sum1dKernel << <blocks, threads >> > (dev_a, dev_c, m, n);
 
 	status = cudaGetLastError();
 	if (status != cudaSuccess) {
