@@ -8,8 +8,10 @@ cudaError_t cudaMean1d(int* a, int *b, const int m, const int n, dim3 threads, d
 __global__ void sum1dKernel(int *a, int *val, const int m, const int n) {
 	int row = blockDim.y * blockIdx.y + threadIdx.y;
 	int col = blockDim.x * blockIdx.x + threadIdx.x;
-	if (col < n && row < m) {
-		val[col] += a[n * row + col];
+	if (row < m && col < n) {
+		printf("%d ", n * row + col);
+		val[col] = a[n * row + col];
+		printf("part %d %d \n", col, val[col]);
 	}
 }
 
@@ -32,8 +34,8 @@ int main() {
 	int threads = 1;
 	int blocks = (m * n + threads - 1) / threads;
 
-	dim3 THREADS(threads);
-	dim3 BLOCKS(blocks);
+	dim3 THREADS(threads, threads);
+	dim3 BLOCKS(blocks, blocks);
 
 	cudaError_t status = cudaMean1d(a, res, m, n, THREADS, BLOCKS);
 	printf("\n");
@@ -89,6 +91,12 @@ cudaError_t cudaMean1d(int* a, int* b, const int m, const int n, dim3 threads, d
 		fprintf(stderr, "Failed to copy from host to GPU buffer\n");
 		goto Error;
 	}
+	
+	status = cudaMemcpy(dev_c, b, n * sizeof(int), cudaMemcpyHostToDevice);
+	if (status != cudaSuccess) {
+		fprintf(stderr, "Failed to copy from host to GPU buffer\n");
+		goto Error;
+	}
 
 	sum1dKernel << <blocks, threads >> > (dev_a, dev_c, m, n);
 
@@ -112,5 +120,6 @@ cudaError_t cudaMean1d(int* a, int* b, const int m, const int n, dim3 threads, d
 
 Error:
 	cudaFree(dev_a);
+	cudaFree(dev_c);
 	return status;
 }
