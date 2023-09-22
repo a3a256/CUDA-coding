@@ -1,9 +1,35 @@
 #include <stdio.h>
+#include <math.h>
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 #include <cstdio>
 
+#define SIZE 12
+#define SHMEMESIZE 12*4
+
 cudaError_t cudaMean1d(int* a, int *b, const int m, const int n, dim3 threads, dim3 blocks);
+
+// yet to test sum1d kerel for sum reduction
+
+__global__ void sum1d(int* a, int* b, const int size) {
+	__shared__ int partial_sum[SHMEMESIZE];
+
+	int tid = blockIdx.x * blockDim.x + threadIdx.x;
+
+	partial_sum[threadIdx.x] = a[tid];
+	__synchthreads();
+
+	for (int s = 1; s < blockDim.x; s *= 2) {
+		if (threadIdx.x % (2 * s) == 0) {
+			partial_sum[threadIdx.x] += partial_sum[threadIdx.x + s];
+		}
+		__syncthreads();
+	}
+
+	if (threadIdx.x == 0) {
+		b[blockIdx.x] = partial_sum[0];
+	}
+}
 
 __global__ void sum1dKernel(int *a, int *val, const int m, const int n) {
 	int row = blockDim.y * blockIdx.y + threadIdx.y;
